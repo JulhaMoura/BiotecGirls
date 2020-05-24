@@ -1,19 +1,44 @@
-c = 0
-cont= +1
-nome = input('Nome do aluno:')
-while (len(nome)<6 or len(nome)>100):
-    nome=input('Digite seu nome novamente:')
-dia = input('Digite o dia do seu nascimento:')
-while (len(dia)<1 or len(dia)>31):
-     dia=input('Digite o dia novamente:')
-mês = input('Digite seu mês:')
-while (len(mês) != [1,2,3,4,5,6,7,8,9,10,11,12]):
-     mês=input('Digite o mês novamente:')
-CPF = int(input('Insira seu CPF:'))
-while (len(CPF)<11 or len(CPF)>11):
-    CPF=input('Digite seu CPF novamente:')
-responsavel = input('Nome do responsável:')
-escola= input('Insira o nome da escola:')
-turno = input('Insira o turno:')
-while (len(turno)!=manhã or len(turno)!=tarde or len(turno)!=noite):
-    turno=input('Digite seu turno novamente:')
+import sqlite3
+conn = sqlite3.connect('estudantes.db')
+cursor = conn.cursor()
+
+cursor.execute('''
+CREATE TABLE IF NOT EXISTS students(
+UserID VARCHAR(20) NOT NULL,
+username VARCHAR(20) NOT NULL,
+firstname VARCHAR(20) NOT NULL,
+password VARCHAR(20) NOT NULL);
+''')
+
+#gravando no bd
+conn.commit()
+
+#solicitando dados
+p_1 = input('UserID: ')
+p_2 = input('username: ')
+p_3 = input('firstname: ')
+p_4 = input('password: ')
+
+#inserindo informações
+cursor.execute('''
+INSERT INTO students(UserID, username, firstname, password)
+VALUES(?,?,?,?)
+''', (p_1, p_2, p_3, p_4))
+
+print('Dados inseridos com sucesso!!!')
+
+#gravando no bd
+conn.commit()
+
+#verificando inversão
+#lendo os dados
+cursor.execute("""
+SELECT*FROM students;
+""")
+print('lendo dados inseridos')
+
+for linha in cursor.fetchall():
+    print(linha)
+
+cursor.close()
+
